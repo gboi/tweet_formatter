@@ -12,8 +12,10 @@ consumer_key = "4wG7s5w7QxGY4SDQYS0Ij5tC3"
 consumer_secret = "vjG0G4gDxjl7HvMapgJRLAF2FRAdENL0FczIjo3l7nYHUy8Hsz"
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 html_file = os.path.join(THIS_FOLDER, 'image.html')
-jpg_file = os.path.join(THIS_FOLDER, 'image.jpg')
+css_file = os.path.join(THIS_FOLDER, 'image.css')
+png_file = os.path.join(THIS_FOLDER, 'image.png')
 bg_file = os.path.join(THIS_FOLDER, 'bg.jpg')
+font_file = os.path.join(THIS_FOLDER, 'truenoexbdit.otf')
     
 def get_image(tweet_id, debug):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -40,23 +42,34 @@ def get_image(tweet_id, debug):
     user_image = convert_image(tmp_file.name)
         
     with open(html_file, "r") as file:
-        html = file.read()
-    html = process_html(html, user_image, screen_name, message, date, background_image)
+        processed_html = file.read()
+    processed_html = process_html(processed_html, user_image, screen_name, message, date)
+    with open(css_file, "r") as file:
+        processed_css = file.read()
+    processed_css = process_css(processed_css, background_image, font_file)
+    with tempfile.TemporaryFile(mode='w+t', delete=False) as tmp_css:
+        tmp_css.writelines(processed_css)
     
     if(debug):
-        print(html)
-    imgkit.from_string(html, jpg_file)
-        
-def process_html(html, user_image, screen_name, message, date, background_image):
+        print(processed_html)
+        print(process_css)
+    imgkit.from_string(processed_html, png_file, css=tmp_css.name)
+    
+def process_html(html, user_image, screen_name, message, date):
+    message = message.replace("\n", "<br/>")
     html = html.replace("%PROFILE_ICON%", user_image)
     html = html.replace("%SCREEN_NAME%", screen_name)
     html = html.replace("%TWEET_CONTENT%", message)
-    html = html.replace("%BACKGROUND_IMAGE%", background_image)
     date_string = '{:%A %m/%d/%Y %I:%M%p}'.format(date)
     # Timezone doesn't work
     # date_string = '{:%A %m/%d/%Y %I:%M%p %Z}'.format(date)
     html = html.replace("%TWEET_DATE%", date_string)
     return html
+
+def process_css(css, background_image, font_file):
+    css = css.replace("%BACKGROUND_IMAGE%", background_image)
+    css = css.replace("%FONT_PATH%", font_file)
+    return css
 
 def convert_image(image):
     with open(image, "rb") as file:
