@@ -9,6 +9,7 @@ Download the [full package](https://github.com/gboi/tweet_formatter/archive/mast
 ### Prerequisites
 
 You need to download and install [wkhtmltopdf](https://wkhtmltopdf.org/).
+You also need to have a "output" folder inside the /dist/windows directory.
 
 #### Windows
 
