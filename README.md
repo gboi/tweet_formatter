@@ -4,9 +4,11 @@ Formats a tweet in a .png file given the tweet's URL.
 
 ## Getting Started
 
+Download the [full package](https://github.com/gboi/tweet_formatter/archive/master.zip); you only need the /dist/windows folder.
+
 ### Prerequisites
 
-You need to download and install [wkhtmltopdf](https://wkhtmltopdf.org/ ).
+You need to download and install [wkhtmltopdf](https://wkhtmltopdf.org/).
 
 #### Windows
 
