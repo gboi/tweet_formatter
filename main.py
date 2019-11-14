@@ -8,9 +8,12 @@ def generate_image(tweet_url, debug=False):
         Tweet_Formatter.get_image(tweet_id, debug)
     except:
         raise IOError("Error parsing Tweet URL")
-    
-if len(sys.argv) not in range (2,4):
+
+if len(sys.argv) > 3:
     raise IOError("Error: input a tweet URL | run (url) [-debug]")
+elif len(sys.argv) == 1:
+    tweet_url = input("Enter tweet url: ")
+    generate_image(tweet_url)
 else:
     for arg in sys.argv:
         if "/status/" in arg:
